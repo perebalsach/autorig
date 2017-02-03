@@ -1,12 +1,12 @@
-import pb_autorig.builder.armBuilder as pb_arm_builder
-import pb_autorig.builder.legBuider as pb_leg_builder
-import pb_autorig.builder.spineBuilder as pb_spine_builder
+import builder.armBuilder as armBuilder
+import builder.legBuider as legBuilder
+import builder.spineBuilder as spineBuilder
 import pymel.core as pm
 import maya.cmds as cmds
 
-reload(pb_arm_builder)
-reload(pb_leg_builder)
-reload(pb_spine_builder)
+reload(armBuilder)
+reload(legBuilder)
+reload(spineBuilder)
 
 
 def createSym(source=None, target=None):
@@ -38,8 +38,8 @@ def createSym(source=None, target=None):
 def build_legs():
 	objList = ['_leg_0_rigHelper', '_leg_1_rigHelper', '_leg_2_rigHelper', '_leg_3_rigHelper', '_leg_4_rigHelper', '_leg_5_rigHelper']
 
-	pb_leg_builder.legGen(base_name='leg', side='L')
-	pb_leg_builder.legGen(base_name='leg', side='R')
+	legBuilder.legGen(base_name='leg', side='L')
+	legBuilder.legGen(base_name='leg', side='R')
 
 	# create the symmetry for each helper
 	for ob in objList:
@@ -50,8 +50,8 @@ def build_legs():
 
 
 def build_arms():
-	pb_arm_builder.LimbGen(spacing=0, num_sections=5, side='L', base_name='arm')
-	pb_arm_builder.LimbGen(spacing=0, num_sections=5, side='R', base_name='arm')
+	armBuilder.LimbGen(spacing=0, num_sections=5, side='L', base_name='arm')
+	armBuilder.LimbGen(spacing=0, num_sections=5, side='R', base_name='arm')
 
 	pm.rotate('R_arm0_rigHelper', (0, 180, 0))
 	pm.move('L_arm0_rigHelper', (0.17, 1.25, 0))
@@ -64,7 +64,7 @@ def build_arms():
 
 
 def build_spine(num_sections=5):
-	pb_spine_builder.build_spine(num_sections=num_sections, base_name='spine', side='M')
+	spineBuilder.build_spine(num_sections=num_sections, base_name='spine', side='M')
 
 
 def organize():
