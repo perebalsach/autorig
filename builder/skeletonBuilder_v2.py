@@ -3,7 +3,7 @@ import pymel.core as pm
 
 def generateJoints(side, baseName, helperList, discardLast):
 	"""
-	based on the rigHelpers it creates the joints in each rigHelper
+	# based on the rigHelpers it creaes the joints in each rigHelper
 	:param side: stirng - L or R
 	:param baseName: string - Name of rig part (arm, leg, spine, ... )
 	:param helperList: list - rigHelpers listr

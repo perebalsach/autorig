@@ -1,7 +1,7 @@
 import pymel.core as pm
 import maya.mel as mel
 from maya import OpenMaya
-import autorig.utils.utils as rigUtils
+import utils.utils as rigUtils
 
 
 class Limb(object):
