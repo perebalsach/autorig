@@ -1,5 +1,6 @@
 import pymel.core as pm
 import maya.mel as mel
+import utils.utils as rigUtils
 
 
 class Hand(object):
@@ -26,7 +27,8 @@ class Hand(object):
 
 		crv = pm.rename(crv, self.side + '_hand_ctrl')
 
-		self.setControlColor(crv)
+		rigUtils.setControlColor(crv)
+		#self.setControlColor(crv)
 
 		# mirror the controller for the Right side
 		if self.side == 'R':
@@ -63,24 +65,6 @@ class Hand(object):
 		if radius:
 			pm.setAttr(ctrl + '.radi', lock=True, keyable=False, cb=False)
 
-	def setControlColor(self, ctrl):
-		"""
-		turn on drawing overrides for the control and sets the color based on the name of the controller.
-		L = Blue, R = Red and others = Yellow
-		:param ctrl: transform
-		"""
-
-		shape = pm.listRelatives(ctrl, s=1)[0]
-		pm.setAttr(shape + '.ove', 1)
-
-		if ctrl.startswith('L'):
-			pm.setAttr(shape + '.ovc', 6)
-
-		elif ctrl.startswith('R'):
-			pm.setAttr(shape + '.ovc', 13)
-
-		else:
-			pm.setAttr(shape + '.ovc', 17)
 
 	def addCtrlAttribute(self, ctrl, attr, locked):
 		"""
@@ -112,10 +96,10 @@ class Hand(object):
 		Connects FK and IK channelBox attributes to the blend node for the FK/IK swith in the channelBox
 		"""
 
-		for armPart in [self.side + '_shoulder_jnt_BC.blender',
-						self.side + '_elbow_jnt_BC.blender',
-						self.side + '_hand_jnt_BC.blender']:
-			pm.connectAttr(self.handCtrl + '.FK_IK_Blend', armPart)
+		for armPart in [self.side + '_arm0_jnt_BC.blender',
+						self.side + '_arm1_jnt_BC.blender',
+						self.side + '_arm2_jnt_BC.blender']:
+			pm.connectAttr(self.handCtrl + '.FK_IK', armPart)
 
 	def createHandJoint(self, jnt):
 		"""
@@ -143,7 +127,7 @@ class Hand(object):
 
 		handGrp = pm.group(name=self.side + '_hand_grp', em=True)
 
-		handJntPos = pm.PyNode(self.side + '_handRoot_jnt')
+		handJntPos = pm.PyNode(self.side + '_hand0_jnt')
 		handJntPos = handJntPos.getTranslation()
 
 		pm.xform(handGrp, piv=(handJntPos[0], handJntPos[1], handJntPos[2]))
@@ -153,6 +137,8 @@ class Hand(object):
 		"""
 		Main proc for creating the IK / FK arm switch
 		"""
+		handRootNode =  pm.PyNode(self.side + '_hand0_jnt')
+		handRootPos = handRootNode.getTranslation('world')
 
 		# create locators for the blending arm and groups.
 		# and then position into the right place
@@ -170,14 +156,14 @@ class Hand(object):
 			for scale in ['.localScaleX', '.localScaleY', '.localScaleZ']:
 				pm.setAttr(loc + scale, 0.001)
 
-			pm.move(loc, (self.handRootPos[0], self.handRootPos[1], self.handRootPos[2]))
+			pm.move(loc, (handRootPos[0], handRootPos[1], handRootPos[2]))
 
 		# parent each locator to the corresponding group
 		for loc, grp in zip([orientFKLoc, orientIKLoc], [orientFKGrp, orientIKGrp]):
 			pm.parent(loc, grp)
 
 		# parent each locator group (IK and FK) to the right place
-		pm.parent(orientFKGrp, self.side + '_elbow_jnt')
+		pm.parent(orientFKGrp, self.side + '_arm1_jnt')
 		pm.parent(orientIKGrp, self.side + '_arm_ik_ctrl')
 
 		self.handOrientConst = pm.orientConstraint(orientIKLoc, orientFKLoc, self.side + '_hand_grp')
@@ -186,16 +172,16 @@ class Hand(object):
 		pm.pointConstraint(self.handJoint, self.side + '_hand_grp')
 
 		# connect orientConstraint weights to handCtrl to be able to switch the weights from the FK/IK attribute
-		pm.connectAttr(self.side + '_hand_ctrl.FK_IK_Blend',
+		pm.connectAttr(self.side + '_hand_ctrl.FK_IK',
 					   self.handOrientConst + '.' + self.side + '_armFKOrient_locW1')
 		handReverseNode = pm.createNode('reverse', name=self.side + '_handRev')
 
-		pm.connectAttr(self.side + '_hand_ctrl.FK_IK_Blend', handReverseNode + '.input.inputX')
+		pm.connectAttr(self.side + '_hand_ctrl.FK_IK', handReverseNode + '.input.inputX')
 		pm.connectAttr(handReverseNode + '.output.outputX',
 					   self.handOrientConst + '.' + self.side + '_armIKOrient_locW0')
 
 		# orient constraint hand module with the bind joints
-		pm.orientConstraint(self.side + '_handRoot_jnt', self.side + '_hand_jnt', mo=True)
+		#pm.orientConstraint(self.side + '_hand_IK_jnt', self.side + '_hand0_jnt', mo=True)
 		pm.parent(self.side + '_arm_limb_ikh',self.side + '_arm_ik_ctrl')
 
 		pm.parent(self.side + '_hand_grp', 'main_ctrl')
@@ -203,7 +189,7 @@ class Hand(object):
 	def _build(self, handJoint, side):
 
 		# create new hand joint chan
-		self.createHandJoint(handJoint)
+		#self.createHandJoint(handJoint)
 
 		# create nurbs curve to control the hand
 		self.handCtrl = self.createHandControl()
@@ -214,16 +200,16 @@ class Hand(object):
 		# hide and create channelBox attributes for the hand controller
 		self.hideAttributes(ctrl=self.handCtrl, trans=True, scale=True, rot=False, vis=True, radius=False)
 		self.addCtrlAttribute(self.handCtrl, attr='_______', locked=True)
-		self.addCtrlAttribute(self.handCtrl, attr='FK_IK_Blend', locked=False)
+		self.addCtrlAttribute(self.handCtrl, attr='FK_IK', locked=False)
 
 		# create and connect FK/IK blend nodes
 		self.connectFKIKBlendAttrs()
 
 		# parent hand joint under the hand controller
-		pm.parent(side + '_handRoot_jnt', self.handCtrl)
+		pm.parent(side + '_hand0_jnt', self.handCtrl)
+
 
 		# create groups and parents to have the hand as a separate module
 		self.organize()
 
 		self.setupHandBehavior()
-

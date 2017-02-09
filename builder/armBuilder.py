@@ -1,5 +1,5 @@
 import pymel.core as pm
-import pb_autorig.builder.rigHelper as pb_rig_helper
+import builder.rigHelper as rigHelper
 
 
 class LimbGen(object):
@@ -25,7 +25,7 @@ class LimbGen(object):
 		# create all the manipulatorHelpers and stores the objects and the positions
 		for i in range(num_sections):
 			# creates the RigHelper
-			limbRigHelpers.append(pb_rig_helper.RigHelperClass(name=side + '_' + base_name + str(i),
+			limbRigHelpers.append(rigHelper.RigHelperClass(name=side + '_' + base_name + str(i),
 													size=0.08,
 													pos=(spacing, 0, 0)))
 			# saves all the manipulatorHelper positions to create the curve later

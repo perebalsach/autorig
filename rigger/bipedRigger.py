@@ -1,12 +1,12 @@
 import pymel.core as pm
-import pb_autorig.rigger.limbClass as limb
-import pb_autorig.rigger.HandClass as hand
-import pb_autorig.rigger.SpineClass as spine
-import pb_autorig.rigger.FootClass as foot
-import pb_autorig.rigger.ShoulderClass as shoulder
-import pb_autorig.rigger.Organize as rigOrganizer
-import pb_autorig.rigger.HeadClass as head
-import pb_autorig.rigger.createRigStructure as rigStruct
+import rigger.limbClass as limb
+import rigger.HandClass as hand
+import rigger.SpineClass as spine
+import rigger.FootClass as foot
+import rigger.ShoulderClass as shoulder
+import rigger.Organize as rigOrganizer
+import rigger.HeadClass as head
+import rigger.createRigStructure as rigStruct
 
 reload(rigStruct)
 reload(limb)

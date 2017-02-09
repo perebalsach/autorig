@@ -1,4 +1,4 @@
-import pb_autorig.builder.rigHelper as pb_rig_helper
+import builder.rigHelper as rigHelper
 import pymel.core as pm
 
 
@@ -15,7 +15,7 @@ def build_spine(num_sections=5, base_name='spine', side=''):
 	# create all the manipulatorHelpers and stores the objects and the positions
 	for i in range(num_sections):
 		# creates the RigHelper
-		limbRigHelpers.append(pb_rig_helper.RigHelperClass(name=side + '_' + base_name + str(i), size=0.1,
+		limbRigHelpers.append(rigHelper.RigHelperClass(name=side + '_' + base_name + str(i), size=0.1,
 														   pos=(0, spacing + (0.14 * num_sections), 0)))
 
 		# saves all the manipulatorHelper positions to create the curve later

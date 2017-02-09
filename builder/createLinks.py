@@ -42,8 +42,3 @@ class Create(object):
 
 	def getPositions(self):
 		return self.source.getTranslation('world'), self.target.getTranslation('world')
-
-"""
-Create(pm.PyNode('L_arm0_rigHelper'),pm.PyNode('M_spine3_rigHelper'), 'dsds')
-Create(pm.PyNode('L_leg_0_rigHelper'),pm.PyNode('M_spine5_rigHelper'), 'ssss')
-"""

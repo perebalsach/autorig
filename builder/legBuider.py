@@ -1,5 +1,5 @@
 import pymel.core as pm
-import pb_autorig.builder.rigHelper as pb_rig_helper
+import builder.rigHelper as rigHelper
 
 class legGen(object):
 
@@ -18,12 +18,12 @@ class legGen(object):
 		helperSize = 0.05
 
 		# creates leg RigHelpers
-		limbRigHelpers.append(pb_rig_helper.RigHelperClass(name=side + '_leg_0' ,size=helperSize+0.02, pos=(0, 0.8, 0)))
-		limbRigHelpers.append(pb_rig_helper.RigHelperClass(name=side + '_leg_1' ,size=helperSize, pos=(0, 0.5, 0.2)))
-		limbRigHelpers.append(pb_rig_helper.RigHelperClass(name=side + '_leg_2' ,size=helperSize, pos=(0, 0.2, 0)))
-		limbRigHelpers.append(pb_rig_helper.RigHelperClass(name=side + '_leg_3' ,size=helperSize, pos=(0, 0, 0)))
-		limbRigHelpers.append(pb_rig_helper.RigHelperClass(name=side + '_leg_4' ,size=helperSize, pos=(0, 0, 0.3)))
-		limbRigHelpers.append(pb_rig_helper.RigHelperClass(name=side + '_leg_5' ,size=helperSize, pos=(0, 0, 0.5)))
+		limbRigHelpers.append(rigHelper.RigHelperClass(name=side + '_leg_0' ,size=helperSize+0.02, pos=(0, 0.8, 0)))
+		limbRigHelpers.append(rigHelper.RigHelperClass(name=side + '_leg_1' ,size=helperSize, pos=(0, 0.5, 0.2)))
+		limbRigHelpers.append(rigHelper.RigHelperClass(name=side + '_leg_2' ,size=helperSize, pos=(0, 0.2, 0)))
+		limbRigHelpers.append(rigHelper.RigHelperClass(name=side + '_leg_3' ,size=helperSize, pos=(0, 0, 0)))
+		limbRigHelpers.append(rigHelper.RigHelperClass(name=side + '_leg_4' ,size=helperSize, pos=(0, 0, 0.3)))
+		limbRigHelpers.append(rigHelper.RigHelperClass(name=side + '_leg_5' ,size=helperSize, pos=(0, 0, 0.5)))
 
 		# saves all the manipulatorHelper positions to create the curve later
 		for helper in range(len(limbRigHelpers)):

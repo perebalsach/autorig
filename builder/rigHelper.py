@@ -1,6 +1,5 @@
 import pymel.core as pm
 
-
 class RigHelperClass(object):
 
 	""" class for building manipulator prior joint creation """
