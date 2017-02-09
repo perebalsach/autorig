@@ -1,11 +1,11 @@
 import pymel.core as pm
 import rigger.limbClass as limb
-import rigger.HandClass as hand
-import rigger.SpineClass as spine
-import rigger.FootClass as foot
-import rigger.ShoulderClass as shoulder
-import rigger.Organize as rigOrganizer
-import rigger.HeadClass as head
+import rigger.handClass as hand
+import rigger.spineClass as spine
+import rigger.footClass as foot
+import rigger.shoulderClass as shoulder
+import rigger.organize as rigOrganizer
+import rigger.headClass as head
 import rigger.createRigStructure as rigStruct
 
 reload(rigStruct)

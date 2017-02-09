@@ -52,6 +52,3 @@ def build():
 
 	pm.select(handJnts[0])
 	pm.mirrorJoint(mirrorYZ=True, mirrorBehavior=True, searchReplace=("L_", "R_"))
-
-
-build()

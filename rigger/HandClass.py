@@ -140,8 +140,8 @@ class Hand(object):
 		handRootNode =  pm.PyNode(self.side + '_hand0_jnt')
 		handRootPos = handRootNode.getTranslation('world')
 
-		# create locators for the blending arm and groups.
-		# and then position into the right place
+		# create locators for the blending FK/IK arm and groups.
+		# to set hand position into the right place
 		orientFKLoc = pm.spaceLocator(name=self.side + '_armFKOrient_loc')
 		orientIKLoc = pm.spaceLocator(name=self.side + '_armIKOrient_loc')
 
@@ -151,7 +151,7 @@ class Hand(object):
 		locFKShape = pm.listRelatives(orientFKLoc, s=1)[0]
 		locIKShape = pm.listRelatives(orientIKLoc, s=1)[0]
 
-		# setup a smaller locator and moves to the wrist joint
+		# setup a smaller locator and move it to the wrist joint (handRoot)
 		for loc in [locFKShape, locIKShape]:
 			for scale in ['.localScaleX', '.localScaleY', '.localScaleZ']:
 				pm.setAttr(loc + scale, 0.001)
@@ -208,7 +208,6 @@ class Hand(object):
 
 		# parent hand joint under the hand controller
 		pm.parent(side + '_hand0_jnt', self.handCtrl)
-
 
 		# create groups and parents to have the hand as a separate module
 		self.organize()
