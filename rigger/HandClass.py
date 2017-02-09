@@ -169,7 +169,7 @@ class Hand(object):
 		self.handOrientConst = pm.orientConstraint(orientIKLoc, orientFKLoc, self.side + '_hand_grp')
 
 		# pointConstraint blend arm joint and handGrp
-		pm.pointConstraint(self.handJoint, self.side + '_hand_grp')
+		pm.pointConstraint(self.side + '_arm2_jnt', self.side + '_hand_grp')
 
 		# connect orientConstraint weights to handCtrl to be able to switch the weights from the FK/IK attribute
 		pm.connectAttr(self.side + '_hand_ctrl.FK_IK',
@@ -185,6 +185,7 @@ class Hand(object):
 		pm.parent(self.side + '_arm_limb_ikh',self.side + '_arm_ik_ctrl')
 
 		pm.parent(self.side + '_hand_grp', 'main_ctrl')
+
 
 	def _build(self, handJoint, side):
 
