@@ -1,5 +1,5 @@
 import pymel.core as pm
-import builder.rigHelper as rigHelper
+import autorig.builder.rigHelper as rigHelper
 
 class legGen(object):
 

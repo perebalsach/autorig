@@ -1,5 +1,5 @@
 import pymel.core as pm
-import pb_autorig.utils.utils as rigUtils
+import autorig.utils.utils as rigUtils
 
 reload(rigUtils)
 
@@ -240,9 +240,9 @@ class Foot(object):
 		Connects FK and IK channelBox attributes to the blend node for the FK/IK swith in the channelBox
 		"""
 
-		for legPart in [self.side + '_hip_jnt_BC.blender',
-						self.side + '_knee_jnt_BC.blender',
-						self.side + '_ankle_jnt_BC.blender']:
+		for legPart in [self.side + '_leg0_jnt_BC.blender',
+						self.side + '_leg1_jnt_BC.blender',
+						self.side + '_leg2_jnt_BC.blender']:
 			pm.connectAttr(self.side + '_foot_ctrl' + '.FK_IK', legPart)
 
 	def _buid(self):

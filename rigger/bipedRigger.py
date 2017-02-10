@@ -1,12 +1,12 @@
 import pymel.core as pm
-import rigger.limbClass as limb
-import rigger.handClass as hand
-import rigger.spineClass as spine
-import rigger.footClass as foot
-import rigger.shoulderClass as shoulder
-import rigger.organize as rigOrganizer
-import rigger.headClass as head
-import rigger.createRigStructure as rigStruct
+import autorig.rigger.limbClass as limb
+import autorig.rigger.handClass as hand
+import autorig.rigger.spineClass as spine
+import autorig.rigger.footClass as foot
+import autorig.rigger.shoulderClass as shoulder
+import autorig.rigger.organize as rigOrganizer
+import autorig.rigger.headClass as head
+import autorig.rigger.createRigStructure as rigStruct
 
 reload(rigStruct)
 reload(limb)
@@ -25,22 +25,23 @@ def rigBiped():
 
 	# limbs creation
 	for side in ['L', 'R']:
-		limb.Limb(startJoint=side + '_shoulder_jnt', midJoint=side + '_elbow_jnt', endJoint=side + '_hand_jnt',
+		limb.Limb(startJoint=side + '_arm0_jnt', midJoint=side + '_arm1_jnt', endJoint=side + '_arm2_jnt',
 				  ikFk=True, side=side, limbPart='arm')
 
-		limb.Limb(startJoint=side + '_hip_jnt', midJoint=side + '_knee_jnt', endJoint=side + '_ankle_jnt', ikFk=True,
-				  side=side, limbPart='leg')
+		#limb.Limb(startJoint=side + '_hip_jnt', midJoint=side + '_knee_jnt', endJoint=side + '_ankle_jnt', ikFk=True, side=side, limbPart='leg')
 
-		hand.Hand(handJoint=side + '_hand_jnt', side=side)
-		foot.Foot(footJnt=side + '_ankle_jnt', side=side)
-
-	spine.Spine(startJoint='COG_jnt')
+		hand.Hand(handJoint=side + '_hand0_jnt', side=side)
+		#foot.Foot(footJnt=side + '_ankle_jnt', side=side)
 
 
-	for side in ['L', 'R']:
-		shoulder.Shoulder(side=side)
+	#spine.Spine(startJoint='COG_jnt')
 
-	head.Head()
-	rigOrganizer.organizeRig()
+
+	#for side in ['L', 'R']:
+	#	shoulder.Shoulder(side=side)
+
+	#head.Head()
+	#rigOrganizer.organizeRig()
+
 
 rigBiped()

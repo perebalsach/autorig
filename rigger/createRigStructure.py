@@ -1,5 +1,5 @@
 import pymel.core as pm
-import pb_autorig.utils.utils as rigUtils
+import autorig.utils.utils as rigUtils
 
 
 def createRigStructure():

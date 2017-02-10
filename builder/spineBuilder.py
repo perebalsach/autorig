@@ -1,4 +1,4 @@
-import builder.rigHelper as rigHelper
+import autorig.builder.rigHelper as rigHelper
 import pymel.core as pm
 
 

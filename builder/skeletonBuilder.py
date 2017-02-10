@@ -1,6 +1,6 @@
 # Auto generates skeleton for the biped based on the rigHelpers in the scene
 import pymel.core as pm
-import utils.utils as rigUtils
+import autorig.utils.utils as rigUtils
 
 
 armHelpersList = pm.ls('*arm*_rigHelper')

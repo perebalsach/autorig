@@ -1,6 +1,6 @@
-import builder.armBuilder as armBuilder
-import builder.legBuider as legBuilder
-import builder.spineBuilder as spineBuilder
+import autorig.builder.armBuilder as armBuilder
+import autorig.builder.legBuider as legBuilder
+import autorig.builder.spineBuilder as spineBuilder
 import pymel.core as pm
 import maya.cmds as cmds
 

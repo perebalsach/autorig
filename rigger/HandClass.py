@@ -1,6 +1,6 @@
 import pymel.core as pm
 import maya.mel as mel
-import utils.utils as rigUtils
+import autorig.utils.utils as rigUtils
 
 
 class Hand(object):
