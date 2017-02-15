@@ -1,8 +1,6 @@
 import pymel.core as pm
 import autorig.utils.utils as rigUtils
-
 reload(rigUtils)
-
 
 class Shoulder(object):
 	def __init__(self, side):
@@ -18,10 +16,10 @@ class Shoulder(object):
 
 		# get shoulder rigHelpers positions
 		shoulderRootHelper = pm.PyNode(self.side + '_arm0_rigHelper')
-		shoulderEndHelper = pm.PyNode(self.side + '_arm1_rigHelper')
+		shoulderEndHelper  = pm.PyNode(self.side + '_arm1_rigHelper')
 
 		self.shoulderRootPos = shoulderRootHelper.getTranslation('world')
-		self.shoulderEndPos = shoulderEndHelper.getTranslation('world')
+		self.shoulderEndPos  = shoulderEndHelper.getTranslation('world')
 
 		jointList.append(pm.joint(name=self.side + '_shoulderRoot_jnt',
 								  p=(self.shoulderRootPos[0], self.shoulderRootPos[1], self.shoulderRootPos[2])))
@@ -33,6 +31,7 @@ class Shoulder(object):
 			pm.select(jointList[i])
 			pm.joint(e=True, oj='yxz', secondaryAxisOrient='zup', ch=True, zso=True)
 
+		pm.select(deselect=True)
 
 	def createShoulderCtrl(self):
 		"""
@@ -62,7 +61,6 @@ class Shoulder(object):
 		"""
 		main shoulder rig setup
 		"""
-
 		self.createShoulderJoints()
-		self.createShoulderCtrl()
-		self.shoulderSetup()
+		# self.createShoulderCtrl()
+		# self.shoulderSetup()

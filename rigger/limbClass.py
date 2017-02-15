@@ -208,9 +208,6 @@ class Limb(object):
 		jntFK = jnt.replace('_jnt', '_FK_ctrl')
 		jntIK = jnt.replace('_jnt', '_IK_jnt')
 
-		print jntFK
-		print jntIK
-
 		# blend connections between bind chain and IK/FK chains
 		for rot, color in zip(['.rotateX', '.rotateY', '.rotateZ'], ['.color1R', '.color1G', '.color1B']):
 			pm.connectAttr(jntFK + rot, bcNode + color)
@@ -325,13 +322,14 @@ class Limb(object):
 
 		# create arm groups
 		if limbPart == 'arm':
-			# for armPart in ['_scapula_jnt', '_hand_ik_ctrl', '_limb_ikh', '_poleVector_ctrl']:
-			pm.parent(self.side + '_scapula_jnt', limbmGrp)
-
 			pm.parent(self.side + '_' + self.limbPart + '_poleVector_ctrl', limbmGrp)
 
-			print ('---->> parent: %s to %s' % (self.side + '_' + limbPart + '_limb_ikh', limbmGrp))
 			pm.parent(self.side + '_' + self.limbPart + '_ik_ctrl', limbmGrp)
+			pm.parent(self.side + '_' + self.limbPart + '0_IK_jnt', limbmGrp)
+			pm.parent(self.side + '_' + self.limbPart + '0_FK_ctrl', limbmGrp)
+			pm.parent(self.side + '_' + self.limbPart + '0_jnt', limbmGrp)
+
+			pm.parent(self.side + '_arm_grp', 'main_ctrl')
 
 		# create legs groups
 		elif limbPart == 'leg':
@@ -344,9 +342,10 @@ class Limb(object):
 			pm.parent(self.startJoint.replace('_jnt', '_FK_ctrl'), limbmGrp)
 			pm.parent(self.startJoint.replace('_jnt', '_IK_jnt'), limbmGrp)
 
-			print ('---->> parent: %s to %s' % (self.side + '_' + limbPart + '_limb_ikh', limbmGrp))
 			pm.parent(self.side + '_' + limbPart + '_ik_ctrl', limbmGrp)
+			pm.parent(self.side + '_' + limbPart + '0_jnt', limbmGrp)
 			pm.parent(limbmGrp, 'main_ctrl')
+
 
 	def _build(self, side):
 		"""
@@ -359,7 +358,6 @@ class Limb(object):
 
 		# FK Build controls for the limb
 		for jnt in [self.startJoint, self.midJoint]:
-			print ('Building control for: %s' % jnt)
 			self.placeCtrl(jnt.replace('_jnt', '_FK_ctrl'), type='fk')
 
 		# Create IK handle and control for switching IK/FK in the correct place
@@ -373,6 +371,6 @@ class Limb(object):
 		for ctrl in [self.startJoint.replace('_jnt', '_FK_ctrl'),
 					 self.midJoint.replace('_jnt', '_FK_ctrl'), self.endJoint.replace('_jnt', '_FK_ctrl')]:
 			self.hideAttributes(ctrl, trans=True, scale=True, rot=False, vis=True, radius=True)
-		"""
+
 		self.organizeLimbGrps(limbPart=self.limbPart)
-		"""
+

@@ -228,6 +228,7 @@ class Foot(object):
 			pm.connectAttr(self.side + '_foot_ctrl.rotate' + rot, footIkGrp + '.rotate' + rot)
 
 		pm.parent(self.side + '_foot_grp', 'main_ctrl')
+		pm.parent(self.side + '_foot0_jnt', self.side + '_foot_grp')
 
 
 	def setFootGroupPivot(self):
@@ -249,7 +250,7 @@ class Foot(object):
 
 	def _buid(self):
 
-		#self.createFootJointChain(self.footJnt)
+		self.createFootJointChain(self.footJnt)
 
 		footCtrl = self.createFootCtrl()
 

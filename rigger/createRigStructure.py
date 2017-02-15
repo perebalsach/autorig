@@ -4,9 +4,12 @@ import autorig.utils.utils as rigUtils
 
 def createRigStructure():
 
+	pm.promptDialog (m='Enter character name:', title='Autorig')
+	characterName = pm.promptDialog(query=True, text=True)
+
 	# create group structre for the rig
-	mainGrp = pm.group(name='model_name', em=True)
-	pm.group(name='model_grp', em=True, p=mainGrp)
+	mainGrp = pm.group(name=characterName, em=True)
+	pm.group(name='mesh_grp', em=True, p=mainGrp)
 	rigGrp = pm.group(name='rig_grp', em=True, p=mainGrp)
 
 	# create main ctrl for the rig
