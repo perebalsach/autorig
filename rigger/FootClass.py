@@ -35,7 +35,7 @@ class Foot(object):
 		pm.rename(footCtrl, self.side + footCtrl)
 		footCtrl = self.side + footCtrl
 
-		# mirror ctrl if we are doing thte right side
+		# mirror ctrl if we are doing the right side
 		if self.side == 'R':
 			pm.scale(footCtrl, (-1, 1, 1))
 			pm.makeIdentity(footCtrl, a=True, s=True)
@@ -78,7 +78,7 @@ class Foot(object):
 
 	def createFootGroupSetup(self):
 
-		# get all the rigHelpers foot postions
+		# get all the rigHelpers foot positions
 		self.footPositions = {'ankle': (0, 0, 0), 'heel': (0, 0, 0), 'ball': (0, 0, 0), 'toe': (0, 0, 0)}
 
 		ankleHelper = pm.PyNode(self.side + '_leg_2_rigHelper')
@@ -114,6 +114,7 @@ class Foot(object):
 		# set the pivot for the foot_grp to the heel
 		pm.xform(heelRollGrp, piv=self.footPositions['heel'])
 
+
 	def createFootConnections(self, ctrl):
 
 		pm.connectAttr(ctrl + '.heel_roll', self.side + '_heelRoll_grp.rotateX', f=True)
@@ -140,19 +141,20 @@ class Foot(object):
 		# create locators for the blending arm and groups.
 		# and then position into the right place
 		footPositions = {'ankle': (0, 0, 0), 'heel': (0, 0, 0), 'ball': (0, 0, 0), 'toe': (0, 0, 0)}
+
+		# convert rigHelpers to PyNodes
 		ankleHelper = pm.PyNode(self.side + '_leg_2_rigHelper')
-		heelHelper = pm.PyNode(self.side + '_leg_3_rigHelper')
-		ballHelper = pm.PyNode(self.side + '_leg_4_rigHelper')
-		toeHelper = pm.PyNode(self.side + '_leg_5_rigHelper')
+		heelHelper  = pm.PyNode(self.side + '_leg_3_rigHelper')
+		ballHelper  = pm.PyNode(self.side + '_leg_4_rigHelper')
+		toeHelper   = pm.PyNode(self.side + '_leg_5_rigHelper')
 
 		# get rigHelpers positions
 		footPositions['ankle'] = ankleHelper.getTranslation('world')
-		footPositions['heel'] = heelHelper.getTranslation('world')
-		footPositions['ball'] = ballHelper.getTranslation('world')
-		footPositions['toe'] = toeHelper.getTranslation('world')
+		footPositions['heel']  = heelHelper.getTranslation('world')
+		footPositions['ball']  = ballHelper.getTranslation('world')
+		footPositions['toe']   = toeHelper.getTranslation('world')
 
-		# create locators for the blending arm and groups.
-		# and then position into the right place
+		# create locators for the blending and groups them
 		orientFKLoc = pm.spaceLocator(name=self.side + '_footFKOrient_loc')
 		orientIKLoc = pm.spaceLocator(name=self.side + '_footIKOrient_loc')
 
@@ -162,10 +164,10 @@ class Foot(object):
 		locFKShape = pm.listRelatives(orientFKLoc, s=1)[0]
 		locIKShape = pm.listRelatives(orientIKLoc, s=1)[0]
 
-		# setup a smaller locator and moves to the wrist joint
+		# setup a smaller locator and moves to the ankle joint
 		for loc in [locFKShape, locIKShape]:
 			for scale in ['.localScaleX', '.localScaleY', '.localScaleZ']:
-				pm.setAttr(loc + scale, 0.001)
+				pm.setAttr(loc + scale, 0.01)
 
 			pm.move(loc, (footPositions['ankle'][0], footPositions['ankle'][1], footPositions['ankle'][2]))
 
@@ -175,7 +177,7 @@ class Foot(object):
 
 		# parent each locator group (IK and FK) to the right place
 		pm.parent(orientIKGrp, self.side + '_leg_ik_ctrl')
-		pm.parent(orientFKGrp, self.side + '_ankle_FK_ctrl')
+		pm.parent(orientFKGrp, self.side + '_leg1_FK_ctrl')
 
 		pm.parent(self.side + '_leg_limb_ikh', self.side + '_leg_ik_ctrl')
 
@@ -247,7 +249,7 @@ class Foot(object):
 
 	def _buid(self):
 
-		self.createFootJointChain(self.footJnt)
+		#self.createFootJointChain(self.footJnt)
 
 		footCtrl = self.createFootCtrl()
 
@@ -257,6 +259,7 @@ class Foot(object):
 		self.createFootGroupSetup()
 
 		self.createFootConnections(footCtrl)
+
 		self.setFootGroupPivot()
 
 		self.connectFKIKBlendAttrs()
