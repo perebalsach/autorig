@@ -11,12 +11,16 @@ class Head(object):
 	def createHeadJoints(self):
 		jointList = []
 
+		# check number of spine joints to locate the helper head helpers
+		spineHelpersList = pm.ls('M_spine*rigHelper', type='transform')
+
+
 		# get head rigHelpers positions
-		headRoot = pm.PyNode('M_spine1_rigHelper')
-		headEnd = pm.PyNode('M_spine0_rigHelper')
+		headRoot = pm.PyNode(spineHelpersList[(len(spineHelpersList)-2)])
+		headEnd = pm.PyNode(spineHelpersList[(len(spineHelpersList)-1)])
 
 		self.headRootPos = headRoot.getTranslation('world')
-		self.headEndPos = headEnd.getTranslation('world')
+		self.headEndPos  = headEnd.getTranslation('world')
 
 		jointList.append(pm.joint(name='M_headRoot_jnt', p=(self.headRootPos[0], self.headRootPos[1], self.headRootPos[2])))
 		jointList.append(pm.joint(name='M_headEnd_jnt', p=(self.headEndPos[0], self.headEndPos[1], self.headEndPos[2])))
@@ -25,6 +29,7 @@ class Head(object):
 		for i in range(len(jointList)):
 			pm.select(jointList[i])
 			pm.joint(e=True, oj='yxz', secondaryAxisOrient='zup', ch=True, zso=True)
+
 
 	def createneckCtrl(self):
 		headCtrl = rigUtils.createRigControl('circle')

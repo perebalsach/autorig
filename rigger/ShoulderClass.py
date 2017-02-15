@@ -62,5 +62,5 @@ class Shoulder(object):
 		main shoulder rig setup
 		"""
 		self.createShoulderJoints()
-		# self.createShoulderCtrl()
-		# self.shoulderSetup()
+		self.createShoulderCtrl()
+		self.shoulderSetup()
