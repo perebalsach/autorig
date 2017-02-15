@@ -1,3 +1,5 @@
 *_rc.py
 *.log
 *.pyc
+
+\.DS_Store
