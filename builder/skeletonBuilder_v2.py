@@ -37,16 +37,17 @@ def build():
 	shoulderHelpersList = (side + '_arm0_rigHelper', side + '_arm1_rigHelper')
 	legHelpersList      = pm.ls(side + '_leg*rigHelper')
 	spineHelpersList    = pm.ls('*_spine*rigHelper')
-	handHelperList      = (side + '_arm3_rigHelper', side + '_arm4_rigHelper')
+	handHelperListLeft  = (side + '_arm3_rigHelper', side + '_arm4_rigHelper')
+	handHelperListRight = ('R' + '_arm3_rigHelper', side + '_arm4_rigHelper')
 	footHelperList      = pm.ls(side + '_leg_2_rigHelper', side + '_leg_4_rigHelper', side + '_leg_5_rigHelper')
 
 	armJnts      = generateJoints(side=side, baseName='arm', helperList=armHelpersList, discardLast=0)
 	# shoulderJnts = generateJoints(side=side, baseName='shoulder', helperList=shoulderHelpersList, discardLast=0)
 	legJnts      = generateJoints(side=side, baseName='leg', helperList=legHelpersList, discardLast=3)
 	spineJnts    = generateJoints(side='M', baseName='spine', helperList=spineHelpersList, discardLast=1)
-	handJnts     = generateJoints(side=side, baseName='hand', helperList=handHelperList, discardLast=0)
+	handJnts     = generateJoints(side=side, baseName='hand', helperList=handHelperListLeft, discardLast=0)
 	footJnts     = generateJoints(side=side, baseName='foot', helperList=footHelperList, discardLast=0)
 
-	for jnt in [armJnts[0], legJnts[0], footJnts[0]]:
+	for jnt in [armJnts[0], legJnts[0], footJnts[0], handJnts[0]]:
 		pm.select(jnt)
 		pm.mirrorJoint(mirrorYZ=True, mirrorBehavior=True, searchReplace=("L_", "R_"))
