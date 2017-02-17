@@ -68,12 +68,11 @@ class Head(object):
 		pm.parent(headFollowLoc, headFollowGrp)
 		# pm.parent(headFollowGrp, 'M_head_ctrl')
 
-
 		pm.move(mainFollowGrp, (self.headRootPos[0], self.headRootPos[1], self.headRootPos[2]))
 		pm.move(headFollowGrp, (self.headRootPos[0], self.headRootPos[1], self.headRootPos[2]))
 
-		neckCtrlNum = (len(pm.ls('M_spine*_ctrl')))
-		pm.select('M_spine%s_ctrl' %neckCtrlNum)
+		neckCtrlNum = (len(pm.ls('M_spine*_jnt'))-1)
+		pm.select('M_spine%s_jnt' %neckCtrlNum)
 		neckCtrl = pm.ls(sl=True)[0]
 		neckCtrl = pm.PyNode(neckCtrl)
 		neckPos = neckCtrl.getTranslation('world')
@@ -83,13 +82,13 @@ class Head(object):
 
 		pm.xform(headFollowGrp, piv=neckPos, ws=True)
 
-		followOrientConst = pm.orientConstraint('M_headFollowMain_loc', 'M_headFollowHead_loc', headFollowHeadGrp)
+		followOrientConst = pm.orientConstraint('M_headFollowMain_loc', 'M_headFollowHead_loc', headFollowHeadGrp, mo=True)
 		print ('NeckCtrl: %s' %neckCtrl)
 		pm.parent('M_head_ctrl', neckCtrl)
 
 		rigUtils.hideAttributes(ctrl='M_head_ctrl', trans=True, scale=True, rot=False, vis=True, radius=False)
 
-		# add channelbox attributes to switch space
+		# add channel box attributes to switch space
 		pm.addAttr('M_head_ctrl', ln="follow", at="enum", en="main:head:" )
 		pm.setAttr('M_head_ctrl.follow', e=True, keyable=True)
 

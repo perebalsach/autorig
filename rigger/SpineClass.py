@@ -26,55 +26,6 @@ class Spine(object):
 		return jntList, len(jntList)
 
 
-	def setControlColor(self, ctrl):
-		"""
-		turn on drawing overrides for the control and sets the color based on the name of the controller.
-		L = Blue, R = Red and others = Yellow
-		:param ctrl: transform
-		"""
-
-		shape = pm.listRelatives(ctrl, s=1)[0]
-		pm.setAttr(shape + '.ove', 1)
-
-		if ctrl.startswith('L'):
-			pm.setAttr(shape + '.ovc', 6)
-
-		elif ctrl.startswith('R'):
-			pm.setAttr(shape + '.ovc', 13)
-
-		else:
-			pm.setAttr(shape + '.ovc', 17)
-
-
-	def hideAttributes(self, ctrl, trans, scale, rot, vis, radius):
-		"""
-		Hide channelbox attributes
-		:param ctrl: string - Name of the control
-		:param trans: bool
-		:param scale: bool
-		:param rot: bool
-		:param vis: bool
-		"""
-
-		if trans:
-			for attr in ['.tx', '.ty', '.tz']:
-				pm.setAttr(ctrl + attr, lock=True, keyable=False, cb=False)
-
-		if rot:
-			for attr in ['.rx', '.ry', '.rz']:
-				pm.setAttr(ctrl + attr, lock=True, keyable=False, cb=False)
-
-		if scale:
-			for attr in ['.sx', '.sy', '.sz']:
-				pm.setAttr(ctrl + attr, lock=True, keyable=False, cb=False)
-
-		if vis:
-			pm.setAttr(ctrl + '.v', lock=True, keyable=False, cb=False)
-
-		if radius:
-			pm.setAttr(ctrl + '.radi', lock=True, keyable=False, cb=False)
-
-
 	def createFKControl(self, jnt):
 		"""
 		Create controls for the spine replacing the shape in the joints for a nurbs curve (control)
@@ -82,7 +33,7 @@ class Spine(object):
 		"""
 
 		ctrlCrv = pm.circle(name=jnt.replace('_jnt', '_ctrl'), nr=(0,1,0), r=2.0)[0]
-		self.setControlColor(ctrlCrv)
+		rigUtils.setControlColor(ctrlCrv)
 
 		pm.scale(0.12,0.12,0.12)
 		pm.makeIdentity(a=True, s=True)
@@ -135,12 +86,10 @@ class Spine(object):
 		cogCtrl = rigUtils.createRigControl('COG')
 		pm.delete(pm.pointConstraint(self.starJoint, cogCtrl))
 		pm.makeIdentity(cogCtrl, a=True, t=True)
-		self.setControlColor(cogCtrl)
+		rigUtils.setControlColor(cogCtrl)
 		cogCtrl = pm.rename(cogCtrl, 'COG_ctrl')
 
-		pm.parentConstraint(cogCtrl, 'COG_jnt_FK', mo=True)
-		pm.orientConstraint('COG_jnt_FK', self.starJoint, mo=True)
-		pm.pointConstraint('COG_jnt_FK', self.starJoint, mo=True)
+		pm.parent(self.starJoint, cogCtrl)
 
 
 	def constraintFKtoBindJnts(self, jnt):
@@ -169,28 +118,26 @@ class Spine(object):
 		"""
 
 		spineGrp = pm.group(name='spine_grp' , em=True)
-		pm.parent(self.starJoint, spineGrp)
 		pm.parent('COG_ctrl', spineGrp)
-		pm.parent('COG_jnt_FK', spineGrp)
 
-		pm.parent('spine_grp', 'main_ctrl')
+		pm.parent(spineGrp, 'main_ctrl')
 
 
 	def setChannelBoxAttrs(self, ctrl):
-		self.hideAttributes(ctrl, trans=False, scale=True, rot=False, vis=True, radius=False)
+		rigUtils.hideAttributes(ctrl, trans=False, scale=True, rot=False, vis=True, radius=False)
+
 
 	def _build(self):
 
-		jntList, numJoints = self.getSpinePositions(self.starJoint)
-		spineJntChainList = self.duplicateSpineChain(self.starJoint)
+		spineJntChainList = pm.ls('M_spine*_jnt')
 
 		for i in range(len(spineJntChainList)-1):
-			self.createFKControl(spineJntChainList[i])
-			self.hideAttributes(spineJntChainList[i], trans=True, scale=True, rot=False, vis=True, radius=True)
+			print(spineJntChainList[i])
+			if i != 0:
+				self.createFKControl(spineJntChainList[i])
+				rigUtils.hideAttributes(spineJntChainList[i], trans=True, scale=True, rot=False, vis=True, radius=True)
 
 		self.createCOGCtrl()
-		self.constraintFKtoBindJnts('COG_jnt_FK')
-
-		self.setChannelBoxAttrs('COG_ctrl')
+		rigUtils.hideAttributes('COG_ctrl', trans=False, scale=True, rot=False, vis=True, radius=False)
 
 		self.organizeSpine()

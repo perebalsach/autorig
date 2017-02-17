@@ -57,27 +57,6 @@ class Limb(object):
 				break
 			"""
 
-	"""
-	def setControlColor(self, ctrl):
-
-		turn on drawing overrides for the control and sets the color based on the name of the controller.
-		L = Blue, R = Red and others = Yellow
-		:param ctrl: transform
-
-
-		shape = pm.listRelatives(ctrl, s=1)[0]
-		pm.setAttr(shape + '.ove', 1)
-
-		if ctrl.startswith('L'):
-			pm.setAttr(shape + '.ovc', 6)
-
-		elif ctrl.startswith('R'):
-			pm.setAttr(shape + '.ovc', 13)
-
-		else:
-			pm.setAttr(shape + '.ovc', 17)
-		"""
-
 	def createControl(self, type):
 		"""
 		Create different nurbs controls for the rig
@@ -119,33 +98,6 @@ class Limb(object):
 
 		return ctrlCrv
 
-	def hideAttributes(self, ctrl, trans, scale, rot, vis, radius):
-		"""
-		Hide channelbox attributes
-		:param ctrl: string - Name of the control
-		:param trans: bool
-		:param scale: bool
-		:param rot: bool
-		:param vis: bool
-		"""
-
-		if trans:
-			for attr in ['.tx', '.ty', '.tz']:
-				pm.setAttr(ctrl + attr, lock=True, keyable=False, cb=False)
-
-		if rot:
-			for attr in ['.rx', '.ry', '.rz']:
-				pm.setAttr(ctrl + attr, lock=True, keyable=False, cb=False)
-
-		if scale:
-			for attr in ['.sx', '.sy', '.sz']:
-				pm.setAttr(ctrl + attr, lock=True, keyable=False, cb=False)
-
-		if vis:
-			pm.setAttr(ctrl + '.v', lock=True, keyable=False, cb=False)
-
-		if radius:
-			pm.setAttr(ctrl + '.radi', lock=True, keyable=False, cb=False)
 
 	def placeCtrl(self, jnt=None, type=None):
 		"""
@@ -180,7 +132,6 @@ class Limb(object):
 			pm.delete(ctrlCrv)
 
 		elif type == 'ik':
-			# ctrlCrv = self.createControl('cube')
 			ctrlCrv = rigUtils.createRigControl('cross')
 
 			pm.delete(pm.orientConstraint(jnt, ctrlCrv))
@@ -272,7 +223,7 @@ class Limb(object):
 		finalV = arrowV + midV
 
 		# create poleVector controller
-		self.poleVectCtrl = self.createControl('poleVector')
+		self.poleVectCtrl = rigUtils.createRigControl('poleVector')
 		self.poleVectCtrl = pm.rename(self.poleVectCtrl, self.side + '_' + self.limbPart + '_' + self.poleVectCtrl)
 
 		pm.select(self.poleVectCtrl)
@@ -280,7 +231,7 @@ class Limb(object):
 		pm.makeIdentity(self.poleVectCtrl, a=True, t=True)
 
 		rigUtils.setControlColor(self.poleVectCtrl)
-		#self.setControlColor(self.poleVectCtrl)
+
 
 	def buildIkCtrlSetup(self, side):
 		"""
@@ -310,8 +261,8 @@ class Limb(object):
 		else:
 			pm.parent(self.side + '_leg_limb_ikh', self.side + '_leg_ik_ctrl')
 
-		self.hideAttributes(ikCtrl, trans=False, scale=True, rot=False, vis=True, radius=False)
-		self.hideAttributes(self.poleVectCtrl, trans=False, scale=True, rot=True, vis=True, radius=False)
+		rigUtils.hideAttributes(ikCtrl, trans=False, scale=True, rot=False, vis=True, radius=False)
+		rigUtils.hideAttributes(self.poleVectCtrl, trans=False, scale=True, rot=True, vis=True, radius=False)
 
 	def organizeLimbGrps(self, limbPart):
 		"""
@@ -370,7 +321,7 @@ class Limb(object):
 		# hide rotations and scale and visibility from the channel box
 		for ctrl in [self.startJoint.replace('_jnt', '_FK_ctrl'),
 					 self.midJoint.replace('_jnt', '_FK_ctrl'), self.endJoint.replace('_jnt', '_FK_ctrl')]:
-			self.hideAttributes(ctrl, trans=True, scale=True, rot=False, vis=True, radius=True)
+			rigUtils.hideAttributes(ctrl, trans=True, scale=True, rot=False, vis=True, radius=True)
 
 		self.organizeLimbGrps(limbPart=self.limbPart)
 
