@@ -104,6 +104,4 @@ class Head(object):
 		self.createHeadJoints()
 		self.createNeckCtrl()
 		self.headSetup()
-		self.spaceSwitchHeadSetup()
-
-
+		# self.spaceSwitchHeadSetup()
