@@ -3,6 +3,7 @@ import autorig.builder.legBuider as legBuilder
 import autorig.builder.spineBuilder as spineBuilder
 import pymel.core as pm
 import maya.cmds as cmds
+import autorig.utils.utils as rigUtils
 
 reload(armBuilder)
 reload(legBuilder)
@@ -72,13 +73,31 @@ def organize():
 	Create group structure to hold the helpers rig
 	"""
 
-	mainHelperGrp = pm.group(name='biped_helper_grp', empty=True)
+	rigHelpersGrp = pm.group(name='rigHelpers_grp', em=True)
 
 	for side in ['L', 'R']:
-		pm.parent(side + '_leg_helper_grp', mainHelperGrp)
-		pm.parent(side + '_arm_helper_grp', mainHelperGrp)
+		pm.parent(side + '_leg_0_rigHelper', rigHelpersGrp)
+		pm.parent(side + '_arm0_rigHelper', rigHelpersGrp)
 
-	pm.parent('M_spine_helper_grp', mainHelperGrp)
+	pm.parent('M_spine0_rigHelper', rigHelpersGrp)
+
+	crvsGrp = pm.group(n='crvs_grp', em=True)
+
+	for side in ['L','R']:
+		pm.parent(side + '_leg_helper_grp', crvsGrp)
+		pm.parent(side + '_arm_helper_grp', crvsGrp)
+
+	pm.parent('M_spine_helper_grp', crvsGrp)
+
+	scaleCtrl = pm.circle(n='scale_ctrl', r=1, nr=(0,1,0))
+	rigUtils.setControlColor(scaleCtrl[0])
+
+	pm.parent(rigHelpersGrp, scaleCtrl[0])
+
+	helpersGrp = pm.group(n='helpers_grp', em=True)
+	pm.parent(crvsGrp, helpersGrp)
+	pm.parent(scaleCtrl[0], helpersGrp)
+
 
 
 # main

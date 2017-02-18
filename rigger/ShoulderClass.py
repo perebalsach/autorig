@@ -85,7 +85,7 @@ class Shoulder(object):
 		for itm in grpList:
 			pm.rename(itm, (itm.replace('L_', 'R_')))
 
-		# unparent the controls 
+		# unparent the controls
 		for side in ['L', 'R']:
 			pm.parent(side + '_shoulder_ctrl', world=True)
 
