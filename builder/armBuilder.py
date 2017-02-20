@@ -30,7 +30,7 @@ class LimbGen(object):
 													pos=(spacing, 0, 0)))
 			# saves all the manipulatorHelper positions to create the curve later
 			arm_pos_list.append(limbRigHelpers[i].getPos())
-			spacing += 0.25
+			spacing += 0.20
 
 		limbRigHelpers.reverse()
 		arm_pos_list.reverse()

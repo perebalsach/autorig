@@ -47,7 +47,7 @@ def build_legs():
 		createSym(source='L' + ob, target='R' + ob)
 
 	# moves the leg
-	pm.move('L_leg_0_rigHelper', 0.2, ws=True, x=True)
+	pm.move('L_leg_0_rigHelper', 0.1, ws=True, x=True)
 
 
 def build_arms():
@@ -55,8 +55,8 @@ def build_arms():
 	armBuilder.LimbGen(spacing=0, num_sections=5, side='R', base_name='arm')
 
 	pm.rotate('R_arm0_rigHelper', (0, 180, 0))
-	pm.move('L_arm0_rigHelper', (0.17, 1.25, 0))
-	pm.move('R_arm0_rigHelper', (-0.17, 1.25, 0))
+	pm.move('L_arm0_rigHelper', (0.17, 1.6, 0))
+	pm.move('R_arm0_rigHelper', (-0.17, 1.6, 0))
 
 
 	# create the symmetry for each helper

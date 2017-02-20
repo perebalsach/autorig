@@ -20,7 +20,7 @@ def build_spine(num_sections=5, base_name='spine', side=''):
 
 		# saves all the manipulatorHelper positions to create the curve later
 		limb_pos_list.append(limbRigHelpers[i].getPos())
-		spacing += 0.25
+		spacing += 0.2
 
 	limbRigHelpers.reverse()
 	limb_pos_list.reverse()
@@ -48,5 +48,7 @@ def build_spine(num_sections=5, base_name='spine', side=''):
 	pm.parent(link_crv, limb_grp)
 
 	pm.select(deselect=True)
+
+	pm.move('M_spine0_rigHelper', (0,1,0))
 
 	return True
