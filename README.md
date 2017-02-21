@@ -1,2 +1,0 @@
-# autorig
-Maya Autorigging solution
