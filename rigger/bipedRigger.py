@@ -31,7 +31,7 @@ def rigBiped():
 		#limb.Limb(startJoint=side + '_hip_jnt', midJoint=side + '_knee_jnt', endJoint=side + '_ankle_jnt', ikFk=True, side=side, limbPart='leg')
 
 		hand.Hand(handJoint=side + '_hand0_jnt', side=side)
-		foot.Foot(footJnt=side + '_foot0_jnt', side=side)
+		# foot.Foot(footJnt=side + '_foot0_jnt', side=side)
 
 
 	spine.Spine(startJoint='COG_jnt')
