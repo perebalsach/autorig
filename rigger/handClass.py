@@ -187,6 +187,19 @@ class Hand(object):
 		pm.parent(self.side + '_hand_grp', 'main_ctrl')
 
 
+	def setupVisibility(self):
+		rigUtils.hideAttributes(self.side + '_arm_poleVector_ctrl', trans=True, scale=True, rot=False, vis=False, radius=True)
+		# armRevNode = pm.createNode('reverse', n=self.side + '_arm_inv')
+		# pm.connectAttr(self.side + '_arm_ik_ctrl.visibility', self.side + '_hand_ctrl.FK_IK')
+		# pm.connectAttr(self.side + '_arm_poleVector_ctrl.visibility', self.side + '_hand_ctrl.FK_IK')
+		#
+		# pm.connectAttr(self.side + '_arm0_FK_ctrl.visibility', armRevNode + 'input.inputX')
+		# pm.connectAttr(armRevNode + 'output.outputX', self.side + '_hand_ctrl.FK_IK')
+		#
+		# pm.connectAttr(self.side + '_arm1_FK_ctrl.visibility', armRevNode + 'input.inputY')
+		# pm.connectAttr(armRevNode + 'output.outputY', self.side + '_hand_ctrl.FK_IK')
+
+
 	def _build(self, handJoint, side):
 
 		# create new hand joint chan
@@ -213,3 +226,4 @@ class Hand(object):
 		self.organize()
 
 		self.setupHandBehavior()
+		# self.setupVisibility()
