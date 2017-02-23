@@ -23,7 +23,6 @@ class Shoulder(object):
 		self.shoulderEndPos  = shoulderEndHelper.getTranslation('world')
 
 		if not shoulder:
-
 			jointList = []
 			jointList.append(pm.joint(name=self.side + '_shoulderRoot_jnt',
 									  p=(self.shoulderRootPos[0], self.shoulderRootPos[1], self.shoulderRootPos[2])))
@@ -74,29 +73,22 @@ class Shoulder(object):
 		pm.parent(self.side + '_shoulderRoot_jnt', self.side + '_shoulder_ctrl')
 		pm.select(deselect=True)
 
-		tmpGrp = pm.group(n='tmp_grp')
-		pm.parent(self.side + '_shoulder_ctrl', tmpGrp)
+		shoulderGrp = pm.group(n=self.side + '_shoulder_grp')
+		pm.parent(self.side + '_shoulder_ctrl', shoulderGrp)
 
-		tmpGrp2 = pm.duplicate(tmpGrp)
-		pm.scale(tmpGrp2, (-1,1,1))
+		shoulderRightGrp = pm.duplicate(shoulderGrp)
+		shoulderRightGrp = pm.rename(shoulderRightGrp, 'R_shoulder_grp')
+		pm.scale(shoulderRightGrp, (-1,1,1))
 
-		# rename contents of the tmp group
-		grpList = pm.listRelatives('tmp_grp1', ad=True)
+		# rename contents of the shoulder group
+		grpList = pm.listRelatives(shoulderRightGrp, ad=True)
 		for itm in grpList:
 			pm.rename(itm, (itm.replace('L_', 'R_')))
 
-		# unparent the controls
-		for side in ['L', 'R']:
-			pm.parent(side + '_shoulder_ctrl', world=True)
-
-		pm.delete(tmpGrp2)
-		pm.delete(tmpGrp)
-
 		rigUtils.setControlColor('R_shoulder_ctrl')
 
-		for side in ['L', 'R']:
-			pm.parent(side + '_arm_grp', side + '_shoulder_ctrl')
-			pm.parent(side + '_shoulder_ctrl', 'main_ctrl')
+		pm.parent(shoulderGrp, 'main_ctrl')
+		pm.parent(shoulderRightGrp, 'main_ctrl')
 
 
 	def build(self):
