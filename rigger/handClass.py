@@ -154,7 +154,7 @@ class Hand(object):
 		# setup a smaller locator and move it to the wrist joint (handRoot)
 		for loc in [locFKShape, locIKShape]:
 			for scale in ['.localScaleX', '.localScaleY', '.localScaleZ']:
-				pm.setAttr(loc + scale, 0.001)
+				pm.setAttr(loc + scale, 0.0005)
 
 			pm.move(loc, (handRootPos[0], handRootPos[1], handRootPos[2]))
 
@@ -188,17 +188,17 @@ class Hand(object):
 
 
 	def setupVisibility(self):
-		rigUtils.hideAttributes(self.side + '_arm_poleVector_ctrl', trans=True, scale=True, rot=False, vis=False, radius=True)
-		# armRevNode = pm.createNode('reverse', n=self.side + '_arm_inv')
-		# pm.connectAttr(self.side + '_arm_ik_ctrl.visibility', self.side + '_hand_ctrl.FK_IK')
-		# pm.connectAttr(self.side + '_arm_poleVector_ctrl.visibility', self.side + '_hand_ctrl.FK_IK')
-		#
-		# pm.connectAttr(self.side + '_arm0_FK_ctrl.visibility', armRevNode + 'input.inputX')
-		# pm.connectAttr(armRevNode + 'output.outputX', self.side + '_hand_ctrl.FK_IK')
-		#
-		# pm.connectAttr(self.side + '_arm1_FK_ctrl.visibility', armRevNode + 'input.inputY')
-		# pm.connectAttr(armRevNode + 'output.outputY', self.side + '_hand_ctrl.FK_IK')
+		for ctrl in ['_arm0_FK_ctrl', '_arm_poleVector_ctrl', '_arm_ik_ctrl']:
+			pm.setAttr(self.side + ctrl + '.visibility', lock=False)
 
+		armRevNode = pm.createNode('reverse', n=self.side + '_arm_inv')
+		pm.connectAttr(self.side + '_hand_ctrl.FK_IK', self.side + '_arm0_FK_ctrl.visibility')
+
+		pm.connectAttr(self.side + '_hand_ctrl.FK_IK', armRevNode + '.input.inputX')
+		pm.connectAttr(armRevNode + '.output.outputX', self.side + '_arm_poleVector_ctrl.visibility')
+
+		pm.connectAttr(self.side + '_hand_ctrl.FK_IK', armRevNode + '.input.inputY')
+		pm.connectAttr(armRevNode + '.output.outputY', self.side + '_arm_ik_ctrl.visibility')
 
 	def _build(self, handJoint, side):
 
@@ -226,4 +226,4 @@ class Hand(object):
 		self.organize()
 
 		self.setupHandBehavior()
-		# self.setupVisibility()
+		self.setupVisibility()

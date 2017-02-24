@@ -167,7 +167,8 @@ class Foot(object):
 		# setup a smaller locator and moves to the ankle joint
 		for loc in [locFKShape, locIKShape]:
 			for scale in ['.localScaleX', '.localScaleY', '.localScaleZ']:
-				pm.setAttr(loc + scale, 0.01)
+				pm.setAttr(loc + scale, 0.0005
+				)
 
 			pm.move(loc, (footPositions['ankle'][0], footPositions['ankle'][1], footPositions['ankle'][2]))
 
@@ -248,6 +249,20 @@ class Foot(object):
 						self.side + '_leg2_jnt_BC.blender']:
 			pm.connectAttr(self.side + '_foot_ctrl' + '.FK_IK', legPart)
 
+	def setupVisibility(self):
+		for ctrl in ['_leg0_FK_ctrl', '_leg_poleVector_ctrl', '_leg_ik_ctrl']:
+			pm.setAttr(self.side + ctrl + '.visibility', lock=False)
+
+		legRevNode = pm.createNode('reverse', n=self.side + '_leg_inv')
+		pm.connectAttr(self.side + '_foot_ctrl.FK_IK', self.side + '_leg0_FK_ctrl.visibility')
+
+		pm.connectAttr(self.side + '_foot_ctrl.FK_IK', legRevNode + '.input.inputX')
+		pm.connectAttr(legRevNode + '.output.outputX', self.side + '_leg_poleVector_ctrl.visibility')
+
+		pm.connectAttr(self.side + '_foot_ctrl.FK_IK', legRevNode + '.input.inputY')
+		pm.connectAttr(legRevNode + '.output.outputY', self.side + '_leg_ik_ctrl.visibility')
+
+
 	def _buid(self):
 
 		self.createFootJointChain(self.footJnt)
@@ -266,3 +281,4 @@ class Foot(object):
 		self.connectFKIKBlendAttrs()
 
 		self.setupFootBehavior()
+		self.setupVisibility()
