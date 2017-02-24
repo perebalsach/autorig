@@ -186,6 +186,7 @@ class Hand(object):
 
 		pm.parent(self.side + '_hand_grp', 'main_ctrl')
 
+		rigUtils.hideAttributes(ctrl=self.side + '_hand_ctrl', trans=True, scale=False, rot=False, vis=True, radius=False)
 
 	def setupVisibility(self):
 		for ctrl in ['_arm0_FK_ctrl', '_arm_poleVector_ctrl', '_arm_ik_ctrl']:
