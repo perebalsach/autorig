@@ -2,7 +2,7 @@ import pymel.core as pm
 import maya.mel as mel
 
 
-def createRigControl(ctrlType):
+def createRigControl(ctrlType, size=1):
 	"""
 	create rig control curves
 
@@ -38,7 +38,7 @@ def createRigControl(ctrlType):
 		return ctrlCrv
 
 	elif ctrlType == 'circle':
-		ctrlCrv = pm.circle(name='ctrl', nr=(1,0,0), r=0.18)
+		ctrlCrv = pm.circle(name='ctrl', nr=(1,0,0), r=0.18)[0]
 
 		return ctrlCrv
 
@@ -67,14 +67,14 @@ def createRigControl(ctrlType):
 		return ctrlCrv
 
 	elif ctrlType == 'cross':
-		ctrlType = mel.eval('curve -d 1 -p 2 0 1 -p 2 0 -1 -p 1 0 -1 -p 1 0 -2 -p -1 0 -2 -p -1 0 -1 -p -2 0 -1 -p -2 0 1 '
+		ctrlCrv = mel.eval('curve -d 1 -p 2 0 1 -p 2 0 -1 -p 1 0 -1 -p 1 0 -2 -p -1 0 -2 -p -1 0 -1 -p -2 0 -1 -p -2 0 1 '
 				 '-p -1 0 1 -p -1 0 2 -p 1 0 2 -p 1 0 1 -p 2 0 1 -k 0 -k 1 -k 2 -k 3 -k 4 -k 5 -k 6 -k 7 -k 8 -k 9 '
 				 '-k 10 -k 11 -k 12 -n "controller_ik" ;')
 
-		pm.scale(ctrlType, (0.5, 0.5, 0.5))
+		pm.scale(ctrlCrv, (0.5, 0.5, 0.5))
 		pm.makeIdentity(a=True, s=True)
 
-		return ctrlType
+		return ctrlCrv
 
 	elif ctrlType == 'foot':
 		ctrlCrv = mel.eval('curve -d 1 -p -0.081122 0 -1.11758 -p 0.390719 0 -0.921584 -p 0.514124 0 -0.616704 '
@@ -113,6 +113,8 @@ def createRigControl(ctrlType):
 		print('---> Debug: accepted types: foot, cross, poleVector, pin, sphere, circle, cube')
 		#pm.warning(m='cannot create ctrl based on the given name')
 
+	pm.scale(ctrlCrv, (size, size, size))
+	pm.makeIdentity(a=True, s=True)
 
 
 def setControlColor(ctrl):

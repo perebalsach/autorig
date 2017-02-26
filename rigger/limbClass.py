@@ -3,6 +3,8 @@ import maya.mel as mel
 from maya import OpenMaya
 import autorig.utils.utils as rigUtils
 
+reload(rigUtils)
+
 
 class Limb(object):
 	def __init__(self, startJoint=None, midJoint=None, endJoint=None, ikFk=True, side=None, limbPart=None):
