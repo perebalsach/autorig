@@ -68,6 +68,10 @@ def build():
 	headJnts  = generateJoints(side='M', baseName='head', helperList=headHelperList, discardLast=0)
 
 	# orient joints
+	# for i1, i2, i3, i4, i5. i6, i7 in zip(spineJnts, armJnts, legJnts, handJnts, footJnts, neckJnts, headJnts):
+	# 	pm.select(jnt)
+	# 	pm.joint(e=True, oj='yxz', secondaryAxisOrient='zup', ch=True, zso=True)
+
 	for jnt in spineJnts:
 		pm.select(jnt)
 		pm.joint(e=True, oj='yxz', secondaryAxisOrient='zup', ch=True, zso=True)
