@@ -107,5 +107,3 @@ def build(spine_sections=5):
 	build_arms()
 	build_spine(spine_sections)
 	organize()
-
-build(spine_sections=6)
