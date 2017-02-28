@@ -298,7 +298,8 @@ class Limb(object):
 			pm.parent(self.side + '_' + limbPart + '_ik_ctrl', limbmGrp)
 			pm.parent(self.side + '_' + limbPart + '0_jnt', limbmGrp)
 			pm.parent(limbmGrp, 'main_ctrl')
-
+			pm.parent(self.side + '_arm_poleVector_ctrl', 'main_ctrl')
+			pm.parent(self.side + '_arm_ik_ctrl', 'main_ctrl')
 
 	def _build(self, side):
 		"""
@@ -326,4 +327,3 @@ class Limb(object):
 			rigUtils.hideAttributes(ctrl, trans=True, scale=True, rot=False, vis=True, radius=True)
 
 		self.organizeLimbGrps(limbPart=self.limbPart)
-

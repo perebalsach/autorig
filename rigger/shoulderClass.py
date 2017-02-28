@@ -89,6 +89,7 @@ class Shoulder(object):
 
 		pm.parent(shoulderGrp, 'main_ctrl')
 		pm.parent(shoulderRightGrp, 'main_ctrl')
+		pm.parent(self.side + '_arm_grp', self.side + '_shoulder_ctrl')
 
 
 	def build(self):
