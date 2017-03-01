@@ -59,48 +59,6 @@ class Limb(object):
 				break
 			"""
 
-	def createControl(self, type):
-		"""
-		Create different nurbs controls for the rig
-		:param type: string - sphere, cube or circle
-		:return: ctrl name
-		"""
-
-		if type == 'cube':
-			ctrlCrv = mel.eval('curve -d 1 -p 0.5 0.5 0.5 -p 0.5 0.5 -0.5 -p -0.5 0.5 -0.5 -p -0.5 -0.5 -0.5 '
-							   '-p 0.5 -0.5 -0.5 -p 0.5 0.5 -0.5 -p -0.5 0.5 -0.5 -p -0.5 0.5 0.5 -p 0.5 0.5 0.5 '
-							   '-p 0.5 -0.5 0.5 -p 0.5 -0.5 -0.5 -p -0.5 -0.5 -0.5 -p -0.5 -0.5 0.5 -p 0.5 -0.5 0.5 '
-							   '-p -0.5 -0.5 0.5 -p -0.5 0.5 0.5 -k 0 -k 1 -k 2 -k 3 -k 4 -k 5 -k 6 -k 7 -k 8 -k 9 -k 10'
-							   '-k 11 -k 12 -k 13 -k 14 -k 15 -n "controller_ik" ;')
-
-		elif type == 'circle':
-			ctrlCrv = pm.circle(name='ctrl', nr=(1, 0, 0), r=0.18)
-
-		elif type == 'sphere':
-			ctrlCrv = mel.eval('curve -d 1 -p 0 0 1 -p 0 0.5 0.866025 -p 0 0.866025 0.5 -p 0 1 0 -p 0 0.866025 -0.5 '
-							   '-p 0 0.5 -0.866025 -p 0 0 -1 -p 0 -0.5 -0.866025 -p 0 -0.866025 -0.5 -p 0 -1 0 '
-							   '-p 0 -0.866025 0.5 -p 0 -0.5 0.866025 -p 0 0 1 -p 0.707107 0 0.707107 -p 1 0 0 '
-							   '-p 0.707107 0 -0.707107 -p 0 0 -1 -p -0.707107 0 -0.707107 -p -1 0 0 -p -0.866025 0.5 0 '
-							   '-p -0.5 0.866025 0 -p 0 1 0 -p 0.5 0.866025 0 -p 0.866025 0.5 0 -p 1 0 0 '
-							   '-p 0.866025 -0.5 0 -p 0.5 -0.866025 0 -p 0 -1 0 -p -0.5 -0.866025 0 -p -0.866025 -0.5 0 '
-							   '-p -1 0 0 -p -0.707107 0 0.707107 -p 0 0 1 -k 0 -k 1 -k 2 -k 3 -k 4 -k 5 -k 6 -k 7 -k 8 '
-							   '-k 9 -k 10 -k 11 -k 12 -k 13 -k 14 -k 15 -k 16 -k 17 -k 18 -k 19 -k 20 -k 21 -k 22 -k 23'
-							   '-k 24 -k 25 -k 26 -k 27 -k 28 -k 29 -k 30 -k 31 -k 32 -n "ctrl" ;')
-
-		elif type == 'poleVector':
-			ctrlCrv = mel.eval(
-				'curve -d 1 -p 0.5 -1 0.866025 -p -0.5 -1 0.866025 -p 0 1 0 -p 0.5 -1 0.866025 -p 1 -1 0 '
-				'-p 0 1 0 -p 0.5 -1 -0.866025 -p 1 -1 0 -p 0 1 0 -p -0.5 -1 -0.866026 -p 0.5 -1 -0.866025'
-				'-p 0 1 0 -p -1 -1 -1.5885e-007 -p -0.5 -1 -0.866026 -p 0 1 0 -p -0.5 -1 0.866025 '
-				'-p -1 -1 -1.5885e-007 -k 0 -k 1 -k 2 -k 3 -k 4 -k 5 -k 6 -k 7 -k 8 -k 9 -k 10 -k 11 '
-				'-k 12 -k 13 -k 14 -k 15 -k 16 -n poleVector_ctrl;')
-			pm.scale(ctrlCrv, (0.05, 0.05, 0.05))
-			pm.rotate(ctrlCrv, (90, 0, 0))
-			pm.makeIdentity(a=True, r=True, s=True)
-
-		return ctrlCrv
-
-
 	def placeCtrl(self, jnt=None, type=None):
 		"""
 		snaps the control to the given joint with the same orientation

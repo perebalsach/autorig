@@ -38,7 +38,7 @@ def createRigControl(ctrlType, size=1):
 		return ctrlCrv
 
 	elif ctrlType == 'circle':
-		ctrlCrv = pm.circle(name='ctrl', nr=(1,0,0), r=0.18)[0]
+		ctrlCrv = pm.circle(name='ctrl', nr=(1,0,0), r=0.18)
 
 		return ctrlCrv
 
