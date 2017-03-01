@@ -155,12 +155,37 @@ class Limb(object):
 		for attr in ['.rx', '.ry', '.rz']:
 			pm.connectAttr(ctrl + attr, jnt + attr)
 
+	def getLimbLength (self, startHelper, endHelper):
+		limbLength = []
+		
+		if self.limbPart == 'arm':
+			armStartHelper = pm.PyNode(startHelper)
+			armEndHelper = pm.PyNode(endHelper)
+		
+			armStartHelperPos = armStartHelper.getTranslation('world')
+			armEndHelperPos = armEndHelper.getTranslation('world')
+			
+			limbLength = armEndHelperPos[0] - armStartHelperPos[0]
+			
+		elif self.limbPart == 'leg':
+			legStartHelper = pm.PyNode(startHelper)
+			legEndHelper = pm.PyNode(endHelper)
+			
+			legStartHelperPos = legStartHelper.getTranslation('world')
+			legEndHelperPos = legEndHelper.getTranslation('world')
+			
+			limbLength = legEndHelperPos[1] - legStartHelperPos[1]
+			
+		return limbLength
+	
 	def placePoleVectorCtrl(self, jntList):
 		"""
 		place pole vector controller in the middle joint and offsets the position
 		:param jntList: string list- list of 3 limb joints
 		"""
-
+		armlimbLenght = self.getLimbLength(self.side + '_arm1_rigHelper', self.side + '_arm3_rigHelper')
+		leglimbLenght = self.getLimbLength(self.side + '_leg_0_rigHelper', self.side + '_leg_2_rigHelper')
+		
 		start = pm.xform(jntList[0], q=1, ws=1, t=1)
 		mid = pm.xform(jntList[1], q=1, ws=1, t=1)
 		end = pm.xform(jntList[2], q=1, ws=1, t=1)
@@ -179,7 +204,7 @@ class Limb(object):
 		projV = startEndN * proj
 
 		arrowV = startMid - projV
-		arrowV *= 4.0
+		arrowV *= 8.0
 		finalV = arrowV + midV
 
 		# create poleVector controller
@@ -187,6 +212,7 @@ class Limb(object):
 		self.poleVectCtrl = pm.rename(self.poleVectCtrl, self.side + '_' + self.limbPart + '_' + self.poleVectCtrl)
 
 		pm.select(self.poleVectCtrl)
+
 		pm.xform(ws=1, t=(finalV.x, finalV.y, finalV.z))
 		pm.makeIdentity(self.poleVectCtrl, a=True, t=True)
 
@@ -201,17 +227,17 @@ class Limb(object):
 		"""
 
 		ikCtrl = self.placeCtrl(self.endJoint, type='ik')
+
 		if not self.limbPart == 'leg':
-			pm.delete(pm.orientConstraint(self.endJoint, ikCtrl))
+			pm.delete(pm.orientConstraint(self.endJoint, ikCtrl, mo=True))
 
 		# create ik handle and pole vector for the IK limb
 		ikh = pm.ikHandle(name=side + '_' + self.limbPart + '_limb_ikh', sj=self.startJoint.replace('_jnt', '_IK_jnt'),
 						  ee=self.endJoint.replace('_jnt', '_IK_jnt'), sol='ikRPsolver')[0]
 
 		rigUtils.setControlColor(ikCtrl)
-		#self.setControlColor(ikCtrl)
-		self.placePoleVectorCtrl((self.startJoint, self.midJoint, self.endJoint))
 
+		self.placePoleVectorCtrl((self.startJoint, self.midJoint, self.endJoint))
 		pm.poleVectorConstraint(self.poleVectCtrl, ikh)
 
 		# End limb control constraint
@@ -223,6 +249,7 @@ class Limb(object):
 
 		rigUtils.hideAttributes(ikCtrl, trans=False, scale=True, rot=False, vis=True, radius=False)
 		rigUtils.hideAttributes(self.poleVectCtrl, trans=False, scale=True, rot=True, vis=True, radius=False)
+
 
 	def organizeLimbGrps(self, limbPart):
 		"""
@@ -258,6 +285,9 @@ class Limb(object):
 			pm.parent(limbmGrp, 'main_ctrl')
 			pm.parent(self.side + '_arm_poleVector_ctrl', 'main_ctrl')
 			pm.parent(self.side + '_arm_ik_ctrl', 'main_ctrl')
+			
+			pm.parent(self.side + '_leg_poleVector_ctrl', 'main_ctrl')
+			pm.parent(self.side + '_leg_ik_ctrl', 'main_ctrl')
 
 	def _build(self, side):
 		"""
@@ -275,7 +305,7 @@ class Limb(object):
 		# Create IK handle and control for switching IK/FK in the correct place
 		self.buildIkCtrlSetup(side=self.side)
 
-		# IK/FK Blend Setup
+		# # IK/FK Blend Setup
 		for jnt in [self.startJoint, self.midJoint, self.endJoint]:
 			self.createIkFkBlendConnections(jnt)
 
