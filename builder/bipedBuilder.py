@@ -101,9 +101,9 @@ def organize():
 
 
 # main
-def build(spine_sections=5):
+def build(spine_sections=5, char_name="character"):
 
 	build_legs()
 	build_arms()
 	build_spine(spine_sections)
-	organize()
+	organize(name=char_name)

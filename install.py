@@ -5,7 +5,7 @@ import sys
 
 # add menu in the userSetup.py to load the menu every time maya runs
 # get maya install documents path
-userLocalScriptPath= cmds.internalVar(usd=True)
+userLocalScriptPath = cmds.internalVar(usd=True)
 
 
 def add_menu():
